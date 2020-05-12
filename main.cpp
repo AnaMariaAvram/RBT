@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 #include <iostream>
+
 using namespace std;
+
 ifstream f("abce.in");
 ofstream g("abce.out");
 
@@ -14,86 +16,86 @@ struct Node
 
 };
 
-class RBtree
+class RBT
 {
     Node *root;
     Node *q;
 public :
-    RBtree()
+    RBT()
     {
         q=NULL;
         root=NULL;
     }
-    void insert(int &);
-    void insertfix(Node *);
-    void leftrotate(Node *);
-    void rightrotate(Node *);
-    void remove(int &);
-    void interval(int &, int &,Node *);
-    void succesorr( int &);
-    void predecesorr(int &);
-    Node* successor(Node *);
-    void delfix(Node *);
-    void disp();
-    void display( Node *);
-    void search(int &);
-    Node* get();
+    void insert ( int & );
+    void insertfix ( Node * );
+    void leftrotate ( Node * );
+    void rightrotate ( Node * );
+    void remove ( int & );
+    void interval ( int &, int &,Node *);
+    void succesorr ( int & );
+    void predecesorr ( int & );
+    Node* successor ( Node *);
+    void delfix ( Node * );
+    void disp ();
+    void display ( Node *);
+    void search ( int & );
+    Node* get ();
 };
-Node * RBtree::get()
+Node * RBT::get ()
 {
     return root;
 }
-void RBtree::insert(int &z)
+void RBT::insert ( int &z )
 {
     int i=0;
-    Node *p,*q;
-    Node *t=new Node;
-    t->data=z;
-    t->left=NULL;
-    t->right=NULL;
-    t->color='r';
-    p=root;
-    q=NULL;
-    if(root==NULL)
+    Node *nod1,*nod2;
+    Node *nod3=new Node;
+    nod3->data=z;
+    nod3->left=NULL;
+    nod3->right=NULL;
+    nod3->color='r';
+    nod1=root;
+    nod2=NULL;
+    if ( root==NULL )
     {
-        root=t;
-        t->parent=NULL;
+        root=nod3;
+        nod3->parent=NULL;
     }
     else
     {
-        while(p!=NULL)
+        while ( nod1!=NULL )
         {
-            q=p;
-            if(p->data<t->data)
-                p=p->right;
+            nod2=nod1;
+            if ( nod1->data<nod3->data )
+                nod1=nod1->right;
             else
-                p=p->left;
+                nod1=nod1->left;
         }
-        t->parent=q;
-        if(q->data<t->data)
-            q->right=t;
+        nod3->parent=nod2;
+        if ( nod2->data<nod3->data )
+            nod2->right=nod3;
         else
-            q->left=t;
+            nod2->left=nod3;
     }
-    insertfix(t);
+    insertfix ( nod3 );
 }
-void RBtree::insertfix(Node *t)
+void RBT::insertfix ( Node *t )
 {
     Node *u;
-    if(root==t)
+    if ( root==t )
     {
         t->color='b';
         return;
     }
-    while(t->parent!=NULL&&t->parent->color=='r')
+    while ( t->parent!=NULL and t->parent->color=='r' )
     {
         Node *g=t->parent->parent;
-        if(g->left==t->parent)
+        if ( g->left==t->parent )
         {
-            if(g->right!=NULL)
+            if ( g->right!=NULL )
             {
                 u=g->right;
-                if(u->color=='r')
+                if ( u->color=='r' )
                 {
                     t->parent->color='b';
                     u->color='b';
@@ -103,22 +105,22 @@ void RBtree::insertfix(Node *t)
             }
             else
             {
-                if(t->parent->right==t)
+                if ( t->parent->right==t )
                 {
                     t=t->parent;
-                    leftrotate(t);
+                    leftrotate ( t );
                 }
                 t->parent->color='b';
                 g->color='r';
-                rightrotate(g);
+                rightrotate ( g );
             }
         }
         else
         {
-            if(g->left!=NULL)
+            if ( g->left!=NULL )
             {
                 u=g->left;
-                if(u->color=='r')
+                if ( u->color=='r' )
                 {
                     t->parent->color='b';
                     u->color='b';
@@ -128,236 +130,234 @@ void RBtree::insertfix(Node *t)
             }
             else
             {
-                if(t->parent->left==t)
+                if ( t->parent->left==t )
                 {
                     t=t->parent;
-                    rightrotate(t);
+                    rightrotate ( t );
                 }
                 t->parent->color='b';
                 g->color='r';
-                leftrotate(g);
+                leftrotate ( g );
             }
         }
         root->color='b';
     }
 }
 
-void RBtree::remove(int &x)
+void RBT::remove ( int &x )
 {
 
     Node *p;
-    p=root;
+    nod=root;
     Node *y=NULL;
     Node *q=NULL;
-    int found=0;
-    while(p!=NULL&&found==0)
+    int ok=0;
+    while ( nod!=NULL and  ok==0 )
     {
-        if(p->data==x)
-            found=1;
-        if(found==0)
+        if ( nod->data==x )
+            ok=1;
+        if ( ok==0 )
         {
-            if(p->data<x)
-                p=p->right;
+            if ( nod->data<x )
+                nod=nod->right;
             else
-                p=p->left;
+                nod=nod->left;
         }
     }
-    if(found)
+    if ( ok!=0 )
     {
-        if(p->left==NULL||p->right==NULL)
-            y=p;
+        if ( nod->left==NULL or nod->right==NULL )
+            y=nod;
         else
-            y=successor(p);
-        if(y->left!=NULL)
+            y=successor(nod);
+        if ( y->left!=NULL )
             q=y->left;
         else
         {
-            if(y->right!=NULL)
+            if ( y->right!=NULL )
                 q=y->right;
             else
                 q=NULL;
         }
-        if(q!=NULL)
+        if ( q!=NULL )
             q->parent=y->parent;
-        if(y->parent==NULL)
+        if ( y->parent==NULL )
             root=q;
         else
         {
-            if(y==y->parent->left)
+            if ( y==y->parent->left )
                 y->parent->left=q;
             else
                 y->parent->right=q;
         }
-        if(y!=p)
+        if(y!=nod)
         {
-            p->color=y->color;
-            p->data=y->data;
+            nod->color=y->color;
+            nod->data=y->data;
         }
         if(y->color=='b')
-            delfix(q);
+            delfix ( q );
     }
 }
 
-void RBtree::delfix(Node *p)
+void RBT::delfix ( Node *nod )
 {
     Node *s;
-    while(p!=root&&p->color=='b')
+    while ( nod!=root and nod->color=='b' )
     {
-        if(p->parent->left==p)
+        if ( nod->parent->left==nod )
         {
-            s=p->parent->right;
-            if(s->color=='r')
+            s=nod->parent->right;
+            if ( s->color=='r' )
             {
                 s->color='b';
-                p->parent->color='r';
-                leftrotate(p->parent);
-                s=p->parent->right;
+                nod->parent->color='r';
+                leftrotate ( nod->parent );
+                s=nod->parent->right;
             }
-            if(s->right->color=='b'&&s->left->color=='b')
+            if ( s->right->color=='b' and  s->left->color=='b' )
             {
                 s->color='r';
-                p=p->parent;
+                nod=nod->parent;
             }
             else
             {
-                if(s->right->color=='b')
+                if ( s->right->color=='b' )
                 {
                     s->left->color=='b';
                     s->color='r';
-                    rightrotate(s);
-                    s=p->parent->right;
+                    rightrotate ( s );
+                    s=nod->parent->right;
                 }
-                s->color=p->parent->color;
-                p->parent->color='b';
+                s->color=nod->parent->color;
+                nod->parent->color='b';
                 s->right->color='b';
-                leftrotate(p->parent);
-                p=root;
+                leftrotate ( nod->parent );
+                nod=root;
             }
         }
         else
         {
-            s=p->parent->left;
-            if(s->color=='r')
+            s=nod->parent->left;
+            if( s->color=='r' )
             {
                 s->color='b';
-                p->parent->color='r';
-                rightrotate(p->parent);
-                s=p->parent->left;
+                nod->parent->color='r';
+                rightrotate ( nod->parent );
+                s=nod->parent->left;
             }
-            if(s->left->color=='b'&&s->right->color=='b')
+            if ( s->left->color=='b' and s->right->color=='b' )
             {
                 s->color='r';
-                p=p->parent;
+                nod=nod->parent;
             }
             else
             {
-                if(s->left->color=='b')
+                if ( s->left->color=='b' )
                 {
                     s->right->color='b';
                     s->color='r';
                     leftrotate(s);
-                    s=p->parent->left;
+                    s=nod->parent->left;
                 }
-                s->color=p->parent->color;
-                p->parent->color='b';
+                s->color=nod->parent->color;
+                nod->parent->color='b';
                 s->left->color='b';
-                rightrotate(p->parent);
-                p=root;
+                rightrotate ( nod->parent );
+                nod=root;
             }
         }
-        p->color='b';
+        nod->color='b';
         root->color='b';
     }
 }
 
-void RBtree::leftrotate(Node *p)
+void RBT::leftrotate ( Node *nod )
 {
-    if(p->right==NULL)
+    if ( nod->right==NULL )
         return ;
     else
     {
-        Node *y=p->right;
-        if(y->left!=NULL)
+        Node *y=nod->right;
+        if ( y->left!=NULL )
         {
-            p->right=y->left;
-            y->left->parent=p;
+            nod->right=y->left;
+            y->left->parent=nod;
         }
         else
-            p->right=NULL;
-        if(p->parent!=NULL)
-            y->parent=p->parent;
-        if(p->parent==NULL)
+            nod->right=NULL;
+        if ( nod->parent!=NULL )
+            y->parent=nod->parent;
+        if ( nod->parent==NULL )
             root=y;
         else
         {
-            if(p==p->parent->left)
-                p->parent->left=y;
+            if ( nod==nod->parent->left )
+                nod->parent->left=y;
             else
-                p->parent->right=y;
+                nod->parent->right=y;
         }
-        y->left=p;
-        p->parent=y;
+        y->left=nod;
+        nod->parent=y;
     }
 }
-void RBtree::rightrotate(Node *p)
+void RBT::rightrotate ( Node *nod )
 {
-    if(p->left==NULL)
+    if ( nod->left==NULL )
         return ;
     else
     {
-        Node *y=p->left;
-        if(y->right!=NULL)
+        Node *y=nod->left;
+        if ( y->right!=NULL )
         {
-            p->left=y->right;
-            y->right->parent=p;
+            nod->left=y->right;
+            y->right->parent=nod;
         }
         else
-            p->left=NULL;
-        if(p->parent!=NULL)
-            y->parent=p->parent;
-        if(p->parent==NULL)
+            nod->left=NULL;
+        if(nod->parent!=NULL)
+            y->parent=nod->parent;
+        if ( nod->parent==NULL )
             root=y;
         else
         {
-            if(p==p->parent->left)
-                p->parent->left=y;
+            if ( nod==nod->parent->left )
+                nod->parent->left=y;
             else
-                p->parent->right=y;
+                nod->parent->right=y;
         }
-        y->right=p;
-        p->parent=y;
+        y->right=nod;
+        nod->parent=y;
     }
 }
 
-Node* RBtree::successor(Node *p)
+Node* RBT::successor ( Node *nod ) ///returneaza succesorul
 {
     Node *y=NULL;
-    if(p->left!=NULL)
+    if ( nod->left!=NULL )
     {
-        y=p->left;
-        while(y->right!=NULL)
+        y=nod->left;
+        while ( y->right!=NULL )
             y=y->right;
     }
     else
     {
-        y=p->right;
-        while(y->left!=NULL)
+        y=nod->right;
+        while ( y->left!=NULL )
             y=y->left;
     }
     return y;
 }
 
-
-
-void  RBtree::succesorr(int &data)
+void  RBT::succesorr ( int &data ) ///afisez succesorul
 {
     int cnt=0;
     Node *x=root;
-    while (x!= NULL)
-        if (x->data>=data)
+    while ( x!= NULL )
+        if ( x->data>=data )
         {
             cnt=x->data;
-            if (cnt==data)
+            if ( cnt==data )
                 break;
             x=x->left;
         }
@@ -366,27 +366,27 @@ void  RBtree::succesorr(int &data)
     g<<cnt<<endl;
 }
 
-void RBtree::interval(int &st, int &dr, Node *p)
+void RBT::interval ( int &st, int &dr, Node *nod )
 {
-    if (st<=p->data)
-        if(p->left!=NULL)
-            interval(st,dr,p->left);
-    if (st<=p->data and dr>=p->data)
-        g<<p->data<<" ";
-    if (dr>=p->data)
-        if (p->right!=NULL)
-            interval(st,dr,p->right);
+    if ( st<=nod->data )
+        if( nod->left!=NULL )
+            interval(st,dr,nod->left);
+    if ( st<=nod->data and dr>=nod->data )
+        g<<nod->data<<" ";
+    if ( dr>=nod->data )
+        if ( nod->right!=NULL )
+            interval(st,dr,nod->right);
 }
 
-void RBtree::predecesorr(int &data)
+void RBT::nodredecesorr ( int &data ) ///afisez nodredecesorul
 {
     int cnt=0;
     Node *x=root;
-    while (x!= NULL)
-        if (x->data<=data)
+    while ( x!= NULL )
+        if ( x->data<=data )
         {
             cnt=x->data;
-            if (cnt==data)
+            if ( cnt==data )
                 break;
             x=x->right;
         }
@@ -394,60 +394,60 @@ void RBtree::predecesorr(int &data)
             x=x->left;
     g<<cnt<<endl;
 }
-void RBtree::search(int &x)
+void RBT::search ( int &x )
 {
-    Node *p=root;
-    int found=0;
-    while(p!=NULL&& found==0)
+    Node *nod=root;
+    int ok=0;
+    while ( nod!=NULL&& ok==0 )
     {
-        if(p->data==x)
-            found=1;
-        if(found==0)
+        if ( nod->data==x )
+            ok=1;
+        if ( ok==0 )
         {
-            if(p->data<x)
-                p=p->right;
+            if ( nod->data<x )
+                nod=nod->right;
             else
-                p=p->left;
+                nod=nod->left;
         }
     }
-   if(found==0) g<<"0";
+   if ( ok==0 ) g<<"0";
    else g<<"1";
    g<<endl;
 }
 int n,op,NR,data1,data2;
-RBtree P;
+RBT P;
 int main()
 {
     f>>n;
-    for(int i=1; i<=n; i++)
+    for ( int i=1; i<=n; i++ )
     {
         f>>op;
-        if( op==1 )
+        if ( op==1 )
         {
             f>>NR;
             P.insert(NR);
         }
-        else if( op==2 )
+        else if ( op==2 )
         {
             f>>NR;
             P.remove(NR);
         }
-        else if( op==3 )
+        else if ( op==3 )
         {
             f>>NR;
             P.search(NR);
         }
-        else if( op==4 )
+        else if ( op==4 )
         {
             f>>NR;
             P.predecesorr(NR);
         }
-        else if( op==5 )
+        else if ( op==5 )
         {
             f>>NR;
             P.succesorr(NR);
         }
-        else if( op==6 )
+        else if ( op==6 )
         {
             f>>data1>>data2;
             P.interval(data1,data2,P.get());
